@@ -1,0 +1,7 @@
+#!/usr/bin/make -f
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/hlibrary.mk
+
+# How to install an extra file into the documentation package
+#binary-fixup/libghc-invertible-syntax-attoparsec-doc::
+#	echo "Some informative text" > debian/libghc-invertible-syntax-attoparsec-doc/usr/share/doc/libghc-invertible-syntax-attoparsec-doc/AnExtraDocFile
