@@ -14,7 +14,7 @@ import Text.Syntax.Poly
    AbstractSyntax (syntax), Syntax (token),
    RunPrinter, ErrorString, errorString)
 
-import qualified Data.ByteString as E (ByteString, concat)
+import qualified Data.ByteString as S (ByteString, concat)
 import Data.ByteString.Lazy (ByteString, append, toChunks)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as C
@@ -62,11 +62,11 @@ runPolyLazyPrinterChar8 printer x = maybe
                            $ runPrinter printer x
 
 
-l2e :: ByteString -> E.ByteString
-l2e =  E.concat . toChunks
+l2s :: ByteString -> S.ByteString
+l2s =  S.concat . toChunks
 
-runPolyPrinter :: RunPrinter Word8 E.ByteString a ErrorString
-runPolyPrinter printer = (l2e `fmap`) . runPolyLazyPrinter printer
+runPolyPrinter :: RunPrinter Word8 S.ByteString a ErrorString
+runPolyPrinter printer = (l2s `fmap`) . runPolyLazyPrinter printer
 
-runPolyPrinterChar8 :: RunPrinter Char E.ByteString a ErrorString
-runPolyPrinterChar8 printer = (l2e `fmap`) . runPolyLazyPrinterChar8 printer
+runPolyPrinterChar8 :: RunPrinter Char S.ByteString a ErrorString
+runPolyPrinterChar8 printer = (l2s `fmap`) . runPolyLazyPrinterChar8 printer
