@@ -15,7 +15,8 @@ cabal-version:       >=1.6
 library
   --hs-source-dirs:       src
   exposed-modules:
-                        Text.Syntax.Parser.Attoparsec
+                        Text.Syntax.Parser.Attoparsec.Text
+                        Text.Syntax.Parser.Attoparsec.ByteString
                         Text.Syntax.Parser.AttoparsecZepto
                         Text.Syntax.Printer.ByteString
                         -- Text.Syntax.Parser.Attoparsec.Check

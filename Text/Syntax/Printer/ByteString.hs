@@ -1,18 +1,23 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Text.Syntax.Printer.ByteString where
+module Text.Syntax.Printer.ByteString (
+  runPolyLazyPrinter, runPolyLazyPrinterChar8,
+  runPolyPrinter, runPolyPrinterChar8
+  ) where
 
 import Control.Monad (liftM2, mplus)
 
 import Control.Isomorphism.Partial (IsoFunctor ((<$>)), unapply)
-import Text.Syntax.Poly.Class
+import Text.Syntax.Poly
   (ProductFunctor ((<*>)),
    IsoAlternative ((<||>), empty), TryAlternative,
-   AbstractSyntax (syntax), StreamSyntax (string), Syntax (token))
+   AbstractSyntax (syntax), Syntax (token),
+   RunPrinter, ErrorString, errorString)
 
-import Data.ByteString (ByteString, append)
-import qualified Data.ByteString as B
-import qualified Data.ByteString.Char8 as C
+import qualified Data.ByteString as E (ByteString, concat)
+import Data.ByteString.Lazy (ByteString, append, toChunks)
+import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy.Char8 as C
 import Data.Word (Word8)
 
 newtype Printer alpha =
@@ -38,11 +43,30 @@ instance AbstractSyntax Printer where
                              then Just B.empty
                              else Nothing)
 
-instance StreamSyntax ByteString Printer where
-  string s = Printer (\() -> Just s)
-
-instance Syntax Word8 ByteString Printer where
+instance Syntax Word8 Printer where
   token  = Printer $ Just . B.singleton
 
-instance Syntax Char ByteString Printer where
+runPolyLazyPrinter :: RunPrinter Word8 ByteString a ErrorString
+runPolyLazyPrinter printer x = maybe
+                           (Left . errorString $ "print error")
+                           Right
+                           $ runPrinter printer x
+
+instance Syntax Char Printer where
   token  = Printer $ Just . C.singleton
+
+runPolyLazyPrinterChar8 :: RunPrinter Char ByteString a ErrorString
+runPolyLazyPrinterChar8 printer x = maybe
+                           (Left . errorString $ "print error")
+                           Right
+                           $ runPrinter printer x
+
+
+l2e :: ByteString -> E.ByteString
+l2e =  E.concat . toChunks
+
+runPolyPrinter :: RunPrinter Word8 E.ByteString a ErrorString
+runPolyPrinter printer = (l2e `fmap`) . runPolyLazyPrinter printer
+
+runPolyPrinterChar8 :: RunPrinter Char E.ByteString a ErrorString
+runPolyPrinterChar8 printer = (l2e `fmap`) . runPolyLazyPrinterChar8 printer
