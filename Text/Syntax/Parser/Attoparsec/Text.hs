@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Text.Syntax.Parser.Attoparsec.Text (
-  runParser, runLazyParser
+  runPolyParser', runPolyParser
   ) where
 
 import Text.Syntax.Parser.Instances ()
@@ -24,15 +24,15 @@ instance TryAlternative (Parser Text) where
 instance Syntax Char (Parser Text) where
   token = A.anyChar
 
-runParser :: RunParser Char Text a ([String], String)
-runParser parser tks =
+runPolyParser' :: RunParser Char Text a ([String], String)
+runPolyParser' parser tks =
   case A.parse parser tks of
     Fail _ estack msg -> Left (estack, msg)
     Partial _         -> Left ([], "runAttoparsec: incomplete input")
     Done _ r          -> Right r
 
-runLazyParser :: RunParser Char L.Text a ([String], String)
-runLazyParser parser tks =
+runPolyParser :: RunParser Char L.Text a ([String], String)
+runPolyParser parser tks =
   case L.parse parser tks of
     L.Fail _ estack msg -> Left (estack, msg)
     L.Done _ r          -> Right r
