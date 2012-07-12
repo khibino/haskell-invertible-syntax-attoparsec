@@ -17,7 +17,7 @@ library
   exposed-modules:
                         Text.Syntax.Parser.Attoparsec.Text
                         Text.Syntax.Parser.Attoparsec.ByteString
-                        Text.Syntax.Parser.AttoparsecZepto
+                        Text.Syntax.Parser.Attoparsec.Zepto
                         Text.Syntax.Printer.Text
                         Text.Syntax.Printer.ByteString
                         -- Text.Syntax.Parser.Attoparsec.Check

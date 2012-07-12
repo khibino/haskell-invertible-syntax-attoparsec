@@ -1,6 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module Text.Syntax.Parser.AttoparsecZepto where
+module Text.Syntax.Parser.Attoparsec.Zepto where
 
 import Data.Word (Word8)
 
