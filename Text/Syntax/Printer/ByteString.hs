@@ -2,7 +2,7 @@
 
 module Text.Syntax.Printer.ByteString (
   runPolyLazyPrinter, runPolyLazyPrinterChar8,
-  runPolyPrinter, runPolyPrinterChar8
+  runPolyPrinter', runPolyPrinterChar8'
   ) where
 
 import Control.Monad (liftM2, mplus)
@@ -65,8 +65,8 @@ runPolyLazyPrinterChar8 printer x = maybe
 l2s :: ByteString -> S.ByteString
 l2s =  S.concat . toChunks
 
-runPolyPrinter :: RunPrinter Word8 S.ByteString a ErrorString
-runPolyPrinter printer = (l2s `fmap`) . runPolyLazyPrinter printer
+runPolyPrinter' :: RunPrinter Word8 S.ByteString a ErrorString
+runPolyPrinter' printer = (l2s `fmap`) . runPolyLazyPrinter printer
 
-runPolyPrinterChar8 :: RunPrinter Char S.ByteString a ErrorString
-runPolyPrinterChar8 printer = (l2s `fmap`) . runPolyLazyPrinterChar8 printer
+runPolyPrinterChar8' :: RunPrinter Char S.ByteString a ErrorString
+runPolyPrinterChar8' printer = (l2s `fmap`) . runPolyLazyPrinterChar8 printer

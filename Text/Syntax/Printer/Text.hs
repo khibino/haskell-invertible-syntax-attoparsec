@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Text.Syntax.Printer.Text (
-  runPolyLazyPrinter, runPolyPrinter
+  runPolyPrinter, runPolyPrinter'
   ) where
 
 import Control.Monad (liftM2, mplus)
@@ -14,7 +14,7 @@ import Text.Syntax.Poly
    RunPrinter, ErrorString, errorString)
 
 
-import qualified Data.Text as E (Text, concat)
+import qualified Data.Text as S (Text, concat)
 import Data.Text.Lazy (Text, append, toChunks, singleton)
 import qualified Data.Text.Lazy as L
 
@@ -44,15 +44,15 @@ instance AbstractSyntax Printer where
 instance Syntax Char Printer where
   token  = Printer $ Just . singleton
 
-runPolyLazyPrinter :: RunPrinter Char Text a ErrorString
-runPolyLazyPrinter printer x = maybe
+runPolyPrinter :: RunPrinter Char Text a ErrorString
+runPolyPrinter printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
 
 
-l2e :: Text -> E.Text
-l2e =  E.concat . toChunks
+l2s :: Text -> S.Text
+l2s =  S.concat . toChunks
 
-runPolyPrinter :: RunPrinter Char E.Text a ErrorString
-runPolyPrinter printer = (l2e `fmap`) . runPolyLazyPrinter printer
+runPolyPrinter' :: RunPrinter Char S.Text a ErrorString
+runPolyPrinter' printer = (l2s `fmap`) . runPolyPrinter printer
