@@ -20,7 +20,8 @@ library
                         Text.Syntax.Parser.Attoparsec.Zepto
                         Text.Syntax.Printer.Text
                         Text.Syntax.Printer.ByteString
-                        -- Text.Syntax.Parser.Attoparsec.Check
+                        Text.Syntax.Check.Attoparsec.Text
+                        Text.Syntax.Check.Attoparsec.ByteString
 
   build-depends:        base < 5
                       , bytestring
