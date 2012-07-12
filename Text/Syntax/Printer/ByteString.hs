@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Text.Syntax.Printer.ByteString (
-  runPolyLazyPrinter, runPolyLazyPrinterChar8,
+  runPolyPrinter, runPolyPrinterChar8,
   runPolyPrinter', runPolyPrinterChar8'
   ) where
 
@@ -46,8 +46,8 @@ instance AbstractSyntax Printer where
 instance Syntax Word8 Printer where
   token  = Printer $ Just . B.singleton
 
-runPolyLazyPrinter :: RunPrinter Word8 ByteString a ErrorString
-runPolyLazyPrinter printer x = maybe
+runPolyPrinter :: RunPrinter Word8 ByteString a ErrorString
+runPolyPrinter printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
@@ -55,8 +55,8 @@ runPolyLazyPrinter printer x = maybe
 instance Syntax Char Printer where
   token  = Printer $ Just . C.singleton
 
-runPolyLazyPrinterChar8 :: RunPrinter Char ByteString a ErrorString
-runPolyLazyPrinterChar8 printer x = maybe
+runPolyPrinterChar8 :: RunPrinter Char ByteString a ErrorString
+runPolyPrinterChar8 printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
@@ -66,7 +66,7 @@ l2s :: ByteString -> S.ByteString
 l2s =  S.concat . toChunks
 
 runPolyPrinter' :: RunPrinter Word8 S.ByteString a ErrorString
-runPolyPrinter' printer = (l2s `fmap`) . runPolyLazyPrinter printer
+runPolyPrinter' printer = (l2s `fmap`) . runPolyPrinter printer
 
 runPolyPrinterChar8' :: RunPrinter Char S.ByteString a ErrorString
-runPolyPrinterChar8' printer = (l2s `fmap`) . runPolyLazyPrinterChar8 printer
+runPolyPrinterChar8' printer = (l2s `fmap`) . runPolyPrinterChar8 printer
