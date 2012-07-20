@@ -13,7 +13,7 @@ import Text.Syntax.Poly
 
 import Data.Attoparsec.Types (Parser, IResult (..))
 
-import Data.ByteString (ByteString)
+import Data.ByteString (ByteString, empty)
 import qualified Data.ByteString.Lazy as L (ByteString)
 import qualified Data.Attoparsec.ByteString as A (anyWord8, try, parse)
 import qualified Data.Attoparsec.ByteString.Char8 as A (anyChar)
@@ -29,12 +29,15 @@ instance TryAlternative (Parser ByteString) where
 instance Syntax Word8 (Parser ByteString) where
   token = A.anyWord8
 
+runResult :: IResult ByteString a -> Either ([String], String) a
+runResult r' = case r' of
+  Fail _ estack msg -> Left (estack, msg)
+  Partial f         -> runResult (f empty)
+  Done _ r          -> Right r
+
+
 runPolyParser' :: RunParser Word8 ByteString a ([String], String)
-runPolyParser' parser tks =
-  case A.parse parser tks of
-    Fail _ estack msg -> Left (estack, msg)
-    Partial _         -> Left ([], "runAttoparsec: incomplete input")
-    Done _ r          -> Right r
+runPolyParser' parser tks = runResult $ A.parse parser tks
 
 runPolyParser :: RunParser Word8 L.ByteString a ([String], String)
 runPolyParser parser tks =
@@ -47,11 +50,7 @@ instance Syntax Char (Parser ByteString) where
   token = A.anyChar
 
 runPolyParserChar8' :: RunParser Char ByteString a ([String], String)
-runPolyParserChar8' parser tks =
-  case A.parse parser tks of
-    Fail _ estack msg -> Left (estack, msg)
-    Partial _         -> Left ([], "runAttoparsec: incomplete input")
-    Done _ r          -> Right r
+runPolyParserChar8' parser tks = runResult $ A.parse parser tks
 
 runPolyParserChar8 :: RunParser Char L.ByteString a ([String], String)
 runPolyParserChar8 parser tks =
