@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Text.Syntax.Printer.Text (
-  runPolyPrinter, runPolyPrinter'
+  runAsPrinter, runAsPrinter'
   ) where
 
 import Control.Monad (liftM2, mplus)
@@ -11,7 +11,7 @@ import Text.Syntax.Poly
   (ProductFunctor ((<*>)),
    IsoAlternative ((<||>), empty), TryAlternative,
    AbstractSyntax (syntax), Syntax (token),
-   RunPrinter, ErrorString, errorString)
+   RunAsPrinter, ErrorString, errorString)
 
 
 import qualified Data.Text as S (Text, concat)
@@ -44,8 +44,8 @@ instance AbstractSyntax Printer where
 instance Syntax Char Printer where
   token  = Printer $ Just . singleton
 
-runPolyPrinter :: RunPrinter Char Text a ErrorString
-runPolyPrinter printer x = maybe
+runAsPrinter :: RunAsPrinter Char Text a ErrorString
+runAsPrinter printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
@@ -54,5 +54,5 @@ runPolyPrinter printer x = maybe
 l2s :: Text -> S.Text
 l2s =  S.concat . toChunks
 
-runPolyPrinter' :: RunPrinter Char S.Text a ErrorString
-runPolyPrinter' printer = (l2s `fmap`) . runPolyPrinter printer
+runAsPrinter' :: RunAsPrinter Char S.Text a ErrorString
+runAsPrinter' printer = (l2s `fmap`) . runAsPrinter printer

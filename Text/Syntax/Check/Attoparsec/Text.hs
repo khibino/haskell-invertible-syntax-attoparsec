@@ -16,18 +16,18 @@ import Text.Syntax.Poly (SyntaxT)
 import Text.Syntax.Check.Prim
   (printParseIso', printParseIso)
 
-import Text.Syntax.Parser.Attoparsec.Text (runPolyParser, runPolyParser')
-import Text.Syntax.Printer.Text (runPolyPrinter, runPolyPrinter')
+import Text.Syntax.Parser.Attoparsec.Text (runAsAttoparsec, runAsAttoparsec')
+import Text.Syntax.Printer.Text (runAsPrinter, runAsPrinter')
 
 
 printParseIsoText0 :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoText0 =  printParseIso' runPolyPrinter runPolyParser
+printParseIsoText0 =  printParseIso' runAsPrinter runAsAttoparsec
 
 printParseIsoText :: Eq a => SyntaxT Char a -> Text -> Either String a
-printParseIsoText =  printParseIso runPolyPrinter runPolyParser
+printParseIsoText =  printParseIso runAsPrinter runAsAttoparsec
 
 printParseIsoText0' :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoText0' =  printParseIso' runPolyPrinter' runPolyParser'
+printParseIsoText0' =  printParseIso' runAsPrinter' runAsAttoparsec'
 
 printParseIsoText' :: Eq a => SyntaxT Char a -> S.Text -> Either String a
-printParseIsoText' =  printParseIso runPolyPrinter' runPolyParser'
+printParseIsoText' =  printParseIso runAsPrinter' runAsAttoparsec'

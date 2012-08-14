@@ -2,13 +2,13 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Text.Syntax.Parser.Attoparsec.Text (
-  runPolyParser', runPolyParser
+  runAsAttoparsec', runAsAttoparsec
   ) where
 
 import Text.Syntax.Parser.Instances ()
 import Text.Syntax.Poly
   ((<||>), TryAlternative (try, (<|>)), Syntax(..),
-   RunParser)
+   RunAsParser)
 
 import Data.Attoparsec.Types (Parser, IResult (..))
 
@@ -24,15 +24,15 @@ instance TryAlternative (Parser Text) where
 instance Syntax Char (Parser Text) where
   token = A.anyChar
 
-runPolyParser' :: RunParser Char Text a ([String], String)
-runPolyParser' parser tks = runResult $ A.parse parser tks where
+runAsAttoparsec' :: RunAsParser Char Text a ([String], String)
+runAsAttoparsec' parser tks = runResult $ A.parse parser tks where
   runResult r' = case r' of
     Fail _ estack msg -> Left (estack, msg)
     Partial f         -> runResult (f empty)
     Done _ r          -> Right r
 
-runPolyParser :: RunParser Char L.Text a ([String], String)
-runPolyParser parser tks =
+runAsAttoparsec :: RunAsParser Char L.Text a ([String], String)
+runAsAttoparsec parser tks =
   case L.parse parser tks of
     L.Fail _ estack msg -> Left (estack, msg)
     L.Done _ r          -> Right r

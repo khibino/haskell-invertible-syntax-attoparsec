@@ -24,32 +24,32 @@ import Text.Syntax.Check.Prim
   (printParseIso', printParseIso)
 
 import Text.Syntax.Parser.Attoparsec.ByteString
-  (runPolyParser, runPolyParser', runPolyParserChar8, runPolyParserChar8')
+  (runAsAttoparsec, runAsAttoparsec', runAsAttoparsecChar8, runAsAttoparsecChar8')
 import Text.Syntax.Printer.ByteString
-  (runPolyPrinter, runPolyPrinter', runPolyPrinterChar8, runPolyPrinterChar8')
+  (runAsPrinter, runAsPrinter', runAsPrinterChar8, runAsPrinterChar8')
 
 
 printParseIsoByteString0 :: Eq a => SyntaxT Word8 a -> a -> Either String a
-printParseIsoByteString0 =  printParseIso' runPolyPrinter runPolyParser
+printParseIsoByteString0 =  printParseIso' runAsPrinter runAsAttoparsec
 
 printParseIsoByteString :: Eq a => SyntaxT Word8 a -> ByteString -> Either String a
-printParseIsoByteString =  printParseIso runPolyPrinter runPolyParser
+printParseIsoByteString =  printParseIso runAsPrinter runAsAttoparsec
 
 printParseIsoByteString0' :: Eq a => SyntaxT Word8 a -> a -> Either String a
-printParseIsoByteString0' =  printParseIso' runPolyPrinter' runPolyParser'
+printParseIsoByteString0' =  printParseIso' runAsPrinter' runAsAttoparsec'
 
 printParseIsoByteString' :: Eq a => SyntaxT Word8 a -> S.ByteString -> Either String a
-printParseIsoByteString' =  printParseIso runPolyPrinter' runPolyParser'
+printParseIsoByteString' =  printParseIso runAsPrinter' runAsAttoparsec'
 
 
 printParseIsoByteString0Char8 :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoByteString0Char8 =  printParseIso' runPolyPrinterChar8 runPolyParserChar8
+printParseIsoByteString0Char8 =  printParseIso' runAsPrinterChar8 runAsAttoparsecChar8
 
 printParseIsoByteStringChar8 :: Eq a => SyntaxT Char a -> ByteString -> Either String a
-printParseIsoByteStringChar8 =  printParseIso runPolyPrinterChar8 runPolyParserChar8
+printParseIsoByteStringChar8 =  printParseIso runAsPrinterChar8 runAsAttoparsecChar8
 
 printParseIsoByteString0Char8' :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoByteString0Char8' =  printParseIso' runPolyPrinterChar8' runPolyParserChar8'
+printParseIsoByteString0Char8' =  printParseIso' runAsPrinterChar8' runAsAttoparsecChar8'
 
 printParseIsoByteStringChar8' :: Eq a => SyntaxT Char a -> S.ByteString -> Either String a
-printParseIsoByteStringChar8' =  printParseIso runPolyPrinterChar8' runPolyParserChar8'
+printParseIsoByteStringChar8' =  printParseIso runAsPrinterChar8' runAsAttoparsecChar8'

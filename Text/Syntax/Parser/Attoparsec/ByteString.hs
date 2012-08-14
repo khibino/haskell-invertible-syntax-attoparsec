@@ -2,14 +2,14 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Text.Syntax.Parser.Attoparsec.ByteString (
-  runPolyParser', runPolyParser,
-  runPolyParserChar8', runPolyParserChar8
+  runAsAttoparsec', runAsAttoparsec,
+  runAsAttoparsecChar8', runAsAttoparsecChar8
   ) where
 
 import Text.Syntax.Parser.Instances ()
 import Text.Syntax.Poly
   ((<||>), TryAlternative (try, (<|>)), Syntax(..),
-   RunParser)
+   RunAsParser)
 
 import Data.Attoparsec.Types (Parser, IResult (..))
 
@@ -36,11 +36,11 @@ runResult r' = case r' of
   Done _ r          -> Right r
 
 
-runPolyParser' :: RunParser Word8 ByteString a ([String], String)
-runPolyParser' parser tks = runResult $ A.parse parser tks
+runAsAttoparsec' :: RunAsParser Word8 ByteString a ([String], String)
+runAsAttoparsec' parser tks = runResult $ A.parse parser tks
 
-runPolyParser :: RunParser Word8 L.ByteString a ([String], String)
-runPolyParser parser tks =
+runAsAttoparsec :: RunAsParser Word8 L.ByteString a ([String], String)
+runAsAttoparsec parser tks =
   case L.parse parser tks of
     L.Fail _ estack msg -> Left (estack, msg)
     L.Done _ r          -> Right r
@@ -49,12 +49,11 @@ runPolyParser parser tks =
 instance Syntax Char (Parser ByteString) where
   token = A.anyChar
 
-runPolyParserChar8' :: RunParser Char ByteString a ([String], String)
-runPolyParserChar8' parser tks = runResult $ A.parse parser tks
+runAsAttoparsecChar8' :: RunAsParser Char ByteString a ([String], String)
+runAsAttoparsecChar8' parser tks = runResult $ A.parse parser tks
 
-runPolyParserChar8 :: RunParser Char L.ByteString a ([String], String)
-runPolyParserChar8 parser tks =
+runAsAttoparsecChar8 :: RunAsParser Char L.ByteString a ([String], String)
+runAsAttoparsecChar8 parser tks =
   case L.parse parser tks of
     L.Fail _ estack msg -> Left (estack, msg)
     L.Done _ r          -> Right r
-

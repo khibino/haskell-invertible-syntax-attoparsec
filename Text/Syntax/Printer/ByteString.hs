@@ -1,8 +1,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Text.Syntax.Printer.ByteString (
-  runPolyPrinter, runPolyPrinterChar8,
-  runPolyPrinter', runPolyPrinterChar8'
+  runAsPrinter, runAsPrinterChar8,
+  runAsPrinter', runAsPrinterChar8'
   ) where
 
 import Control.Monad (liftM2, mplus)
@@ -12,7 +12,7 @@ import Text.Syntax.Poly
   (ProductFunctor ((<*>)),
    IsoAlternative ((<||>), empty), TryAlternative,
    AbstractSyntax (syntax), Syntax (token),
-   RunPrinter, ErrorString, errorString)
+   RunAsPrinter, ErrorString, errorString)
 
 import qualified Data.ByteString as S (ByteString, concat)
 import Data.ByteString.Lazy (ByteString, append, toChunks)
@@ -46,8 +46,8 @@ instance AbstractSyntax Printer where
 instance Syntax Word8 Printer where
   token  = Printer $ Just . B.singleton
 
-runPolyPrinter :: RunPrinter Word8 ByteString a ErrorString
-runPolyPrinter printer x = maybe
+runAsPrinter :: RunAsPrinter Word8 ByteString a ErrorString
+runAsPrinter printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
@@ -55,8 +55,8 @@ runPolyPrinter printer x = maybe
 instance Syntax Char Printer where
   token  = Printer $ Just . C.singleton
 
-runPolyPrinterChar8 :: RunPrinter Char ByteString a ErrorString
-runPolyPrinterChar8 printer x = maybe
+runAsPrinterChar8 :: RunAsPrinter Char ByteString a ErrorString
+runAsPrinterChar8 printer x = maybe
                            (Left . errorString $ "print error")
                            Right
                            $ runPrinter printer x
@@ -65,8 +65,8 @@ runPolyPrinterChar8 printer x = maybe
 l2s :: ByteString -> S.ByteString
 l2s =  S.concat . toChunks
 
-runPolyPrinter' :: RunPrinter Word8 S.ByteString a ErrorString
-runPolyPrinter' printer = (l2s `fmap`) . runPolyPrinter printer
+runAsPrinter' :: RunAsPrinter Word8 S.ByteString a ErrorString
+runAsPrinter' printer = (l2s `fmap`) . runAsPrinter printer
 
-runPolyPrinterChar8' :: RunPrinter Char S.ByteString a ErrorString
-runPolyPrinterChar8' printer = (l2s `fmap`) . runPolyPrinterChar8 printer
+runAsPrinterChar8' :: RunAsPrinter Char S.ByteString a ErrorString
+runAsPrinterChar8' printer = (l2s `fmap`) . runAsPrinterChar8 printer
