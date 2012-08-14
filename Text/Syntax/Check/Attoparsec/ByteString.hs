@@ -21,7 +21,7 @@ import Data.Word (Word8)
 
 import Text.Syntax.Poly (SyntaxT)
 import Text.Syntax.Check.Prim
-  (printParseIso', printParseIso)
+  (printParseIso0, printParseIso)
 
 import Text.Syntax.Parser.Attoparsec.ByteString
   (runAsAttoparsec, runAsAttoparsec', runAsAttoparsecChar8, runAsAttoparsecChar8')
@@ -30,26 +30,26 @@ import Text.Syntax.Printer.ByteString
 
 
 printParseIsoByteString0 :: Eq a => SyntaxT Word8 a -> a -> Either String a
-printParseIsoByteString0 =  printParseIso' runAsPrinter runAsAttoparsec
+printParseIsoByteString0 =  printParseIso0 runAsPrinter runAsAttoparsec
 
 printParseIsoByteString :: Eq a => SyntaxT Word8 a -> ByteString -> Either String a
 printParseIsoByteString =  printParseIso runAsPrinter runAsAttoparsec
 
 printParseIsoByteString0' :: Eq a => SyntaxT Word8 a -> a -> Either String a
-printParseIsoByteString0' =  printParseIso' runAsPrinter' runAsAttoparsec'
+printParseIsoByteString0' =  printParseIso0 runAsPrinter' runAsAttoparsec'
 
 printParseIsoByteString' :: Eq a => SyntaxT Word8 a -> S.ByteString -> Either String a
 printParseIsoByteString' =  printParseIso runAsPrinter' runAsAttoparsec'
 
 
 printParseIsoByteString0Char8 :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoByteString0Char8 =  printParseIso' runAsPrinterChar8 runAsAttoparsecChar8
+printParseIsoByteString0Char8 =  printParseIso0 runAsPrinterChar8 runAsAttoparsecChar8
 
 printParseIsoByteStringChar8 :: Eq a => SyntaxT Char a -> ByteString -> Either String a
 printParseIsoByteStringChar8 =  printParseIso runAsPrinterChar8 runAsAttoparsecChar8
 
 printParseIsoByteString0Char8' :: Eq a => SyntaxT Char a -> a -> Either String a
-printParseIsoByteString0Char8' =  printParseIso' runAsPrinterChar8' runAsAttoparsecChar8'
+printParseIsoByteString0Char8' =  printParseIso0 runAsPrinterChar8' runAsAttoparsecChar8'
 
 printParseIsoByteStringChar8' :: Eq a => SyntaxT Char a -> S.ByteString -> Either String a
 printParseIsoByteStringChar8' =  printParseIso runAsPrinterChar8' runAsAttoparsecChar8'
