@@ -6,7 +6,7 @@ import BinTerm
 import Data.Text.Lazy (Text, unpack)
 
 import Text.Syntax.Check.Attoparsec.Text (printParseIsoText)
-import Text.Syntax.Printer.Text(runPolyPrinter)
+import Text.Syntax.Printer.Text(runAsPrinter)
 
 exprPPIso :: Text -> Either String Exp
 exprPPIso =  printParseIsoText expr
@@ -17,7 +17,7 @@ programPPIso =  printParseIsoText program
 showResult :: BinSyntax a -> Either String a -> String
 showResult syn =  d where
   d (Right r) = "Good isomorphism syntax:\n" ++
-                unpack (fromRight (runPolyPrinter syn r)) ++ "\n"
+                unpack (fromRight (runAsPrinter syn r)) ++ "\n"
   d (Left  e) = e
   fromRight (Right r) = r
 

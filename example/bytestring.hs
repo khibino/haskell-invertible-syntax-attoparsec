@@ -6,7 +6,7 @@ import BinTerm
 import Data.ByteString.Char8 (ByteString, unpack)
 
 import Text.Syntax.Check.Attoparsec.ByteString (printParseIsoByteStringChar8')
-import Text.Syntax.Printer.ByteString(runPolyPrinterChar8')
+import Text.Syntax.Printer.ByteString(runAsPrinterChar8')
 
 exprPPIso :: ByteString -> Either String Exp
 exprPPIso =  printParseIsoByteStringChar8' expr
@@ -17,7 +17,7 @@ programPPIso =  printParseIsoByteStringChar8' program
 showResult :: BinSyntax a -> Either String a -> String
 showResult syn =  d where
   d (Right r) = "Good isomorphism syntax:\n" ++
-                unpack (fromRight (runPolyPrinterChar8' syn r)) ++ "\n"
+                unpack (fromRight (runAsPrinterChar8' syn r)) ++ "\n"
   d (Left  e) = e
   fromRight (Right r) = r
 
